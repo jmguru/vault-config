@@ -1,0 +1,13 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: as-auth
+  namespace: default
+spec:
+  method: kubernetes
+  mount: as-mount
+  kubernetes:
+    role: role1
+    serviceAccount: default
+    audiences:
+      - vault

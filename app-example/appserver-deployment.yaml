@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (765fde254)
+  labels:
+    io.kompose.service: appserver
+  name: appserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: appserver
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (765fde254)
+      labels:
+        io.kompose.network/k8-nodeapp-default: "true"
+        io.kompose.service: appserver
+    spec:
+      containers:
+        - name: appserver
+          env:
+          - name: BALKYHOST
+            valueFrom:
+              secretKeyRef:
+                name: appserverdata
+                key: BALKYHOST
+          - name: BALKYPORT
+            valueFrom:
+              secretKeyRef:
+                name: appserverdata
+                key: BALKYPORT
+          - name: DBHOST
+            valueFrom:
+              secretKeyRef:
+                name: appserverdata
+                key: DBHOST
+          - name: PORT
+            valueFrom:
+              secretKeyRef:
+                name: appserverdata
+                key: PORT
+          image: jmguru/k8-nodeapp-appserver:latest
+          ports:
+            - containerPort: 8080
+        - image: jmguru/k8-nodeapp-balkyserver:latest
+          env:
+            - name: APPSERVERHOST
+              value: "127.0.0.1"
+            - name: PORT
+              value: "8080"
+            - name: BALKYPORT
+              value: "8090"
+            - name: BALKYHOST
+              value: balkyserver
+            - name: REDISHOST
+              value: redisserver
+            - name: REDISPORT
+              value: "6379"
+          name: balkyserver
+          ports:
+            - containerPort: 8090
+              hostPort: 8090
+              protocol: TCP
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: regcred

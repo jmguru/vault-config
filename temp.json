@@ -1,0 +1,6 @@
+{
+  "BALKYHOST":"127.0.0.1",
+  "BALKYPORT":"8090",
+  "DBHOST":"dbserver",
+  "PORT":"8080"
+}
