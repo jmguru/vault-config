@@ -1,5 +1,5 @@
 ## Introduction
-In this document, we will quickly setup a stateful Vault server then install the Vault secrets operator. We will also create an example of implementing the Vault secrets operator. 
+In this document, we will help you quickly setup a stateful Vault server then install the Vault secrets operator. We will also create an example of implementing the Vault secrets operator. 
 
 ## Install Vault
 This vault is non-dev, stateful with storage. 
